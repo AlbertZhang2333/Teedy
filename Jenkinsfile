@@ -16,9 +16,14 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('surefire') {
+            steps {
+                sh 'mvn surefire-report:report'
+            }
+        }
         stage('Doc') {
             steps {
-                sh 'mvn javadoc:javadoc --fail-never'
+                sh 'mvn javadoc:jar'
             }
         }
     }
