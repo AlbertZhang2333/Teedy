@@ -21,11 +21,6 @@ pipeline {
                 sh 'mvn javadoc:javadoc'
             }
         }
-        stage('surefire-report
-            steps {
-                sh 'surefire-report:report'
-            }
-        }
     }
 
     post {
