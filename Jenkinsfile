@@ -11,6 +11,21 @@ pipeline {
                 sh 'mvn pmd:pmd'
             }
         }
+        stage('Test report') {
+            steps {
+                sh 'mvn test --fail-never'
+            }
+        }
+        stage('Doc') {
+            steps {
+                sh 'mvn javadoc:javadoc'
+            }
+        }
+        stage('surefire-report
+            steps {
+                sh 'surefire-report:report'
+            }
+        }
     }
 
     post {
@@ -18,6 +33,7 @@ pipeline {
             archiveArtifacts artifacts: '**/target/site/**', fingerprint: true
             archiveArtifacts artifacts: '**/target/**/*.jar', fingerprint: true
             archiveArtifacts artifacts: '**/target/**/*.war', fingerprint: true
+            archiveArtifacts artifacts: '**/target/**/surefire-reports', fingerprint: true
         }
     }
 }
