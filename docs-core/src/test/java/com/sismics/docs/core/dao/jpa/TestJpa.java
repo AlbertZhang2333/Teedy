@@ -1,12 +1,16 @@
 package com.sismics.docs.core.dao.jpa;
 
 import com.sismics.docs.BaseTransactionalTest;
+import com.sismics.docs.core.dao.FileDao;
 import com.sismics.docs.core.dao.UserDao;
+import com.sismics.docs.core.model.jpa.File;
 import com.sismics.docs.core.model.jpa.User;
 import com.sismics.docs.core.util.TransactionUtil;
 import com.sismics.docs.core.util.authentication.InternalAuthenticationHandler;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Date;
 
 /**
  * Tests the persistance layer.
@@ -35,5 +39,27 @@ public class TestJpa extends BaseTransactionalTest {
 
         // Authenticate using the database
         Assert.assertNotNull(new InternalAuthenticationHandler().authenticate("username", "12345678"));
+
+        FileDao fileDao = new FileDao();
+        File file = new File();
+        file.setContent("content");
+        file.setDocumentId("documentId");
+        file.setUserId("userId");
+        file.setName("name");
+        file.setMimeType("mimeType");
+        file.setContent("content");
+        Date date = new Date();
+        file.setCreateDate(date);
+        file.setDeleteDate(date);
+        file.setVersion(1);
+        file.setVersionId("versionId");
+        file.setLatestVersion(true);
+        String fileId = fileDao.create(file, "me");
+
+        TransactionUtil.commit();
+
+        user = userDao.getById(fileId);
+        Assert.assertNotNull(user);
+        Assert.assertEquals("name", user.getUsername());
     }
 }
